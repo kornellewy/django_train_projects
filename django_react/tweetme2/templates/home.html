@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+Welcome to tweetme2
+
+<div id='tweets'>
+    Loading...
+</div>
+
+<script>
+    const tweetsElement = document.getElementById("tweets") // bierzemy to div za pomoca id, czyli get html
+    // tweetsElement.innerHTML = "Loading..." // zmieniamy wartosc html
+
+    const xhr = new XMLHttpRequest() //const to deklaracja typuz zmienej, new nowy obiekt
+    const method = 'GET' // Zamiast post
+    const url = '/tweets'
+    const responseType = "json"
+
+    // ustawiamy typ odpowiedzi
+    xhr.responseType = responseType
+    // open requset with this method and that url
+    xhr.open(method, url)
+    // jak skonczymy sie wczytywac strona to to rb
+    xhr.onload = function() {
+        const serverResponse = xhr.response
+        const listedItems = serverResponse.response // array
+        var finalTweetStr = ""
+        var i;
+        for (i=0;i<listedItems.length; i++){
+            console.log(i)
+        }
+        // console.log(listedItems)
+    }
+    xhr.send()
+
+</script>
+{% endblock content %}
