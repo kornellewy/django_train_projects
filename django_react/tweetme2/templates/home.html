@@ -1,13 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-Welcome to tweetme2
+<div class = "text-center mb-4" >
+    <h1>Welcome to tweetme2</h1>
+</div>
+
+<div class='row text-center mb-3'>
+    <div class='col mx-auto col-10'>
+        <form method='POST' id='tweet-create-form' class='form' action='/create-tweet'> 
+            {% csrf_token %}
+            <input type='hidden' value='/' name='next'/>
+            <textarea class='form-control' name='content' placeholder='Your tweet...'></textarea>
+            <button class = 'btn btn-secondary' type='submit'>Tweet</button>
+        </form>
+    </div>
+</div>
 
 <div id='tweets'>
     Loading...
 </div>
 
 <script>
+    function handleTweetCreateDidSubmit(event){
+        event.preventDefault()
+        console.log(event)
+    }
+
+    const tweetCreateFormEl = document.getElementById("tweet-create-form")
+    tweetCreateFormEl.addEventListener("submit", handleTweetCreateDidSubmit)
+
+    function loadTweets(tweetsElement){
+        const xhr = new XMLHttpRequest() //const to deklaracja typuz zmienej, new nowy obiekt
+        const method = 'GET' // Zamiast post
+        const url = '/tweets'
+        const responseType = "json"
+        // ustawiamy typ odpowiedzi
+        xhr.responseType = responseType
+        // open requset with this method and that url
+        xhr.open(method, url)
+        // jak skonczymy sie wczytywac strona to to rb
+        xhr.onload = function() {
+            const serverResponse = xhr.response
+            const listedItems = serverResponse.response // array
+            var finalTweetStr = ""
+            var i;
+            for (i=0;i<listedItems.length; i++){
+                var current_item = formatTweetElement(listedItems[i])
+                finalTweetStr += current_item
+            }
+            tweetsElement.innerHTML = finalTweetStr
+        }
+        xhr.send()
+    }
 
     function handleDidLike(tweet_id, currentCount){
         console.log(tweet_id, currentCount)
@@ -21,36 +65,17 @@ Welcome to tweetme2
 
     // funkcja do formatowania tweeta
     function formatTweetElement(tweet){
-        var formattedTweet = "<div class = 'mb-4 tweet' id ='tweet-'"+tweet.id+"><p>"+
+        var formattedTweet = "<div class = 'col-12 col-md-10 mx-auto border rounded mb-4 py-3 tweet' id ='tweet-'"+tweet.id+"><p>"+
         tweet.content+"</p><div class ='btn-group'>"+LikeBtn(tweet)+"</div></div>"
         return formattedTweet
     }
 
-    const tweetsElement = document.getElementById("tweets") // bierzemy to div za pomoca id, czyli get html
+    const tweetsEl = document.getElementById("tweets") // bierzemy to div za pomoca id, czyli get html
     // tweetsElement.innerHTML = "Loading..." // zmieniamy wartosc html
+    loadTweets(tweetsEl)
+    
 
-    const xhr = new XMLHttpRequest() //const to deklaracja typuz zmienej, new nowy obiekt
-    const method = 'GET' // Zamiast post
-    const url = '/tweets'
-    const responseType = "json"
-
-    // ustawiamy typ odpowiedzi
-    xhr.responseType = responseType
-    // open requset with this method and that url
-    xhr.open(method, url)
-    // jak skonczymy sie wczytywac strona to to rb
-    xhr.onload = function() {
-        const serverResponse = xhr.response
-        const listedItems = serverResponse.response // array
-        var finalTweetStr = ""
-        var i;
-        for (i=0;i<listedItems.length; i++){
-            var current_item = formatTweetElement(listedItems[i])
-            finalTweetStr += current_item
-        }
-        tweetsElement.innerHTML = finalTweetStr
-    }
-    xhr.send()
+    
 
 </script>
 {% endblock content %}
