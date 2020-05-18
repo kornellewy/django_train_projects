@@ -1,8 +1,9 @@
 from django import forms
+from django.conf import settings
 
 from .models import Tweet
 
-MAX_LENGTH = 240
+
 
 class TweetForm(forms.ModelForm):
     content = forms.CharField()
@@ -12,6 +13,6 @@ class TweetForm(forms.ModelForm):
 
     def clean_content(self):
         content = self.cleaned_data.get("content")
-        if len(content)>MAX_LENGTH:
+        if len(content)>settings.MAX_LENGTH:
             raise forms.ValidationError("This tweet is to long.")
         return content
