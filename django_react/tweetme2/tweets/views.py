@@ -89,6 +89,7 @@ def tweet_action_view(request,*args, **kwargs):
     return Response({}, status=200)
 
 # 4:53:10
+# https://www.django-rest-framework.org/api-guide/testing/
 
 
 
