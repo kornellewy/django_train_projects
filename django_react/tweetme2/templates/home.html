@@ -136,7 +136,7 @@
         xhr.send()
     }
 
-    function handleDidLike(tweet_id, currentCount, action){
+    function handleTweetActionBtn(tweet_id, currentCount, action){
         const url = "/api/tweets/action"
         const method = "POST"
         const data = JSON.stringify({
@@ -160,13 +160,18 @@
 
     // funkcja do dodanie butona
     function LikeBtn(tweet){
-        return "<button class='btn btn-primary' onClick=handleDidLike("+
+        return "<button class='btn btn-primary' onClick=handleTweetActionBtn("+
         tweet.id+","+tweet.likes+",'like'"+")>" + tweet.likes + "Like</button>"
     }
 
     function UnLikeBtn(tweet){
-        return "<button class='btn btn-outline-primary' onClick=handleDidLike("+
+        return "<button class='btn btn-outline-primary' onClick=handleTweetActionBtn("+
         tweet.id+","+tweet.likes+",'unlike')>Unlike</button>"
+    }
+
+    function RetweetBtn(tweet){
+        return "<button class='btn btn-outline-success' onClick=handleTweetActionBtn("+
+        tweet.id+","+tweet.likes+",'retweet')>Retweet</button>"
     }
 
     // funkcja do formatowania tweeta
@@ -175,6 +180,7 @@
         tweet.content+"</p><div class ='btn-group'>"+
             LikeBtn(tweet)+
             UnLikeBtn(tweet)+
+            RetweetBtn(tweet)+
             "</div></div>"
         return formattedTweet
     }

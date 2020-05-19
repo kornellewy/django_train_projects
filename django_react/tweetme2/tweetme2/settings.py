@@ -126,7 +126,7 @@ LOGIN_URL = '/login'
 
 # internal varible 
 MAX_LENGTH = 240
-TWEET_ACTION_OPTIONS = ["like", "urlike", "retweet"]
+TWEET_ACTION_OPTIONS = ["like", "unlike", "retweet"]
 
 # rest
 DEFAULT_RENDERER_CLASSES = [

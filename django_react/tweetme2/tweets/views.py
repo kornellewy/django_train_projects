@@ -19,7 +19,7 @@ from .serializers import TweetSerializer, TweetActionSerializer
 def tweet_create_view(request, *args, **kwargs):
     serializer = TweetSerializer(data=request.POST or None)
     if serializer.is_valid(raise_exception=True):
-        obj = serializer.save(user = request.user)
+        obj = serializer.save(user = request.user) 
         return Response(serializer.data, status=201)
     return Response({}, status=400)
 
@@ -58,8 +58,10 @@ def tweet_action_view(request,*args, **kwargs):
     id is requiered
     like unlike retweet
     '''
+    
     serializer = TweetActionSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
+        print("##############################################")
         data = serializer.validated_data
         tweet_id = data.get("id")
         action = data.get("action")
@@ -72,9 +74,7 @@ def tweet_action_view(request,*args, **kwargs):
             obj.likes.add(request.user)
             return Response(serializer, status=200)
         elif action == "unlike":
-            serializer = TweetSerializer(obj)
             obj.likes.remove(request.user)
-            return Response(serializer, status=200)
         elif action == "retweet":
             # todo
             pass
@@ -93,6 +93,7 @@ def tweet_action_view(request,*args, **kwargs):
 
 def tweet_create_view_pure_django(request, *args, **kwargs):
     user = request.user
+
 
     if not request.user.is_authenticated:
         user=None
